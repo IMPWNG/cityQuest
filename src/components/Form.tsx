@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 
 export default function Form() {
   const [title, setTitle] = useState<string>("");
+  const [content, setContent] = useState<string>("");
 
   const router = useRouter();
 
@@ -12,7 +13,7 @@ export default function Form() {
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/createPost/`,
       {
         method: "POST",
-        body: JSON.stringify({ title }),
+        body: JSON.stringify({ title, content }),
       }
     );
     const res = await data.json();
@@ -21,6 +22,7 @@ export default function Form() {
       console.log("error", res);
     }
     setTitle("");
+    setContent("");
   }
 
   return (
@@ -35,6 +37,14 @@ export default function Form() {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
+      <input
+        type="text"
+        placeholder="Content"
+        className="border-2 border-gray-400 p-2 rounded-md text-black"
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+      />
+      <br />
       <button
         type="submit"
         className="bg-blue-600 text-white p-2 rounded-md mt-2"

@@ -3,6 +3,7 @@ import prisma from "../../../prisma/client";
 
 type postProps = {
   title: string;
+  content: string;
 };
 
 export default async function handler(
@@ -12,13 +13,14 @@ export default async function handler(
   try {
     const post: postProps = JSON.parse(req.body);
     if (req.method === "POST") {
-      if (!post.title.length) {
+      if (!post.title.length && !post.content.length) {
         return res.status(400).json({ msg: "Please enter a title" });
       }
       try {
         const data = await prisma.post.create({
           data: {
             title: post.title,
+            content: post.content,
           },
         });
         res.status(200).json(data);

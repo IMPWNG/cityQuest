@@ -23,41 +23,67 @@ async function handleDeletePost(id: number) {
 
 }
 
-
 export default function Home({ data: initialData }: any) {
   const [data, setData] = useState<[]>(initialData);
 
+
   useEffect(() => {
     setData(initialData);
+
   }, [initialData]);
 
   const deletePost = async (id: number) => {
     await handleDeletePost(id);
+
     const updatedData = await getPosts();
+ 
     setData(updatedData);
+
+    
+
   };
 
-
+console.log(data)
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
+
+      <div className="flex flex-col items-center justify-center">
+        <Link href="/login" className="text-blue-600 hover:underline">
+        <button
+  
+          className="bg-blue-600 text-white p-2 rounded-md mt-2"
+        >
+          Login
+        </button>
+        </Link>
+
+
+      </div>
+
       <h1 className="text-6xl font-bold text-center">City Quest</h1>
       <Form />
       <div className="flex flex-col items-center justify-center">
+  
         {data.map((post: any) => (
           <div
             key={post.id}
-            className="flex flex-col items-center justify-center border-2 border-gray-400 p-2 rounded-md text-white mt-2"
+            className="bg-white shadow-lg rounded-lg mx-auto max-w-md my-4 p-6 overflow-hidden"
           >
-            <h2 className="text-2xl font-bold">{post.title}</h2>
-            <button
-              onClick={() => deletePost(post.id)}
-              className="bg-red-600 text-white p-2 rounded-md mt-2"
-            >
-              Delete
-            </button>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">{post.title}</h2>
+            <p className="text-gray-700 leading-relaxed">{post.content}</p>
+            <div className="mt-4 flex items-center justify-between">
+              <button
+                onClick={() => deletePost(post.id)}
+                className="bg-red-600 text-white p-2 rounded-md mt-2 transition duration-200 ease-in-out hover:bg-red-700"
+              >
+                Delete
+              </button>
+            </div>
           </div>
         ))}
+
+
       </div>
 
       <p className="text-xl text-center">
