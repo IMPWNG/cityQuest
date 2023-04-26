@@ -1,45 +1,211 @@
 
 import Link from "next/link";
 import { useState, FormEvent } from "react";
+import { useRouter } from 'next/router';
+import { signOut, useSession } from 'next-auth/react';
 
 export default function LoginPage() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
+    const router = useRouter();
+    const isActive: (pathname: string) => boolean = (pathname) =>
+        router.pathname === pathname;
 
-    const handleSubmit = async (e: FormEvent) => {
-        e.preventDefault();
-       
-    };
+    const { data: session, status } = useSession();
+
+    let left = (
+        <div className="left">
+            <Link href="/">
+                <p className="bold" data-active={isActive('/')}>
+                    Feed
+                </p>
+            </Link>
+            <style jsx>{`
+        .bold {
+          font-weight: bold;
+        }
+
+        a {
+          text-decoration: none;
+          color: var(--geist-foreground);
+          display: inline-block;
+        }
+
+        .left a[data-active='true'] {
+          color: gray;
+        }
+
+        a + a {
+          margin-left: 1rem;
+        }
+      `}</style>
+        </div>
+    );
+
+    let right = null;
+
+    if (status === 'loading') {
+        left = (
+            <div className="left">
+                <Link href="/">
+                    <p className="bold" data-active={isActive('/')}>
+                        Feed
+                    </p>
+                </Link>
+                <style jsx>{`
+          .bold {
+            font-weight: bold;
+          }
+
+          a {
+            text-decoration: none;
+            color: var(--geist-foreground);
+            display: inline-block;
+          }
+
+          .left a[data-active='true'] {
+            color: gray;
+          }
+
+          a + a {
+            margin-left: 1rem;
+          }
+        `}</style>
+            </div>
+        );
+        right = (
+            <div className="right">
+                <p>Validating session ...</p>
+                <style jsx>{`
+          .right {
+            margin-left: auto;
+          }
+        `}</style>
+            </div>
+        );
+    }
+
+    if (!session) {
+        right = (
+            <div className="right">
+                <Link href="/api/auth/signin">
+                    <p data-active={isActive('/signup')}>Log in</p>
+                </Link>
+                <style jsx>{`
+          a {
+            text-decoration: none;
+            color: var(--geist-foreground);
+            display: inline-block;
+          }
+
+          a + a {
+            margin-left: 1rem;
+          }
+
+          .right {
+            margin-left: auto;
+          }
+
+          .right a {
+            border: 1px solid var(--geist-foreground);
+            padding: 0.5rem 1rem;
+            border-radius: 3px;
+          }
+        `}</style>
+            </div>
+        );
+    }
+
+    if (session) {
+        left = (
+            <div className="left">
+                <Link href="/">
+                    <p className="bold" data-active={isActive('/')}>
+                        Feed
+                    </p>
+                </Link>
+                <Link href="/drafts">
+                    <a data-active={isActive('/drafts')}>My drafts</a>
+                </Link>
+                <style jsx>{`
+          .bold {
+            font-weight: bold;
+          }
+
+          a {
+            text-decoration: none;
+            color: var(--geist-foreground);
+            display: inline-block;
+          }
+
+          .left a[data-active='true'] {
+            color: gray;
+          }
+
+          a + a {
+            margin-left: 1rem;
+          }
+        `}</style>
+            </div>
+        );
+        right = (
+            <div className="right">
+                <p>
+                    {session.user?.name} ({session.user?.email})
+                </p>
+                <Link href="/create">
+                    <button>
+                        <a>New post</a>
+                    </button>
+                </Link>
+                <button onClick={() => signOut()}>
+                    <a>Log out</a>
+                </button>
+                <style jsx>{`
+          a {
+            text-decoration: none;
+            color: var(--geist-foreground);
+            display: inline-block;
+          }
+
+          p {
+            display: inline-block;
+            font-size: 13px;
+            padding-right: 1rem;
+          }
+
+          a + a {
+            margin-left: 1rem;
+          }
+
+          .right {
+            margin-left: auto;
+          }
+
+          .right a {
+            border: 1px solid var(--geist-foreground);
+            padding: 0.5rem 1rem;
+            border-radius: 3px;
+          }
+
+          button {
+            border: none;
+          }
+        `}</style>
+            </div>
+        );
+    }
 
     return (
-        <div className="flex flex-col items-center justify-center">
-            <h1 className="text-4xl font-bold mb-4">Log In</h1>
-            <form onSubmit={handleSubmit} className="flex flex-col">
-                <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Email"
-                    className="border-2 border-gray-400 p-2 rounded-md text-black"
-                />
-                <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Password"
-                    className="border-2 border-gray-400 p-2 rounded-md text-black"
-                />
-                <button type="submit" className="bg-blue-600 text-white p-2 rounded-md mt-2">
-                    Submit
-                </button>
-            </form>
-            {error && <p>{error}</p>}
-            <Link href="/">
-                Go back home
-            </Link>
-
-        </div>
+        <nav>
+            {left}
+            {right}
+            <style jsx>{`
+        nav {
+          display: flex;
+          padding: 2rem;
+          align-items: center;
+        }
+      `}</style>
+        </nav>
     );
 };
 

@@ -7,21 +7,21 @@ export default async function handler(
 ) {
   try {
     const { id } = req.query;
-    const postId = parseInt(id as string, 10);
-    if (isNaN(postId)) {
-      return res.status(400).json({ msg: "Invalid post id" });
+    const questId = parseInt(id as string, 10);
+    if (isNaN(questId)) {
+      return res.status(400).json({ msg: "Invalid quest id" });
     }
 
     if (req.method === "DELETE") {
       try {
-        const data = await prisma.post.delete({
+        const data = await prisma.quest.delete({
           where: {
-            id: postId,
+            id: questId,
           },
         });
         res.status(200).json(data);
       } catch (err) {
-        return res.status(500).json({ msg: "Error deleting post" });
+        return res.status(500).json({ msg: "Error deleting quest" });
       }
     } else {
       res.setHeader("Allow", ["DELETE"]);
