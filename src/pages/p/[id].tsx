@@ -12,10 +12,6 @@ interface QuestInd {
     published?: boolean;
 }
 
-interface QuestProps {
-    data: QuestInd[];
-}
-
 const getServerSideProps: GetServerSideProps = async (
     context: GetServerSidePropsContext<ParsedUrlQuery>
 ): Promise<GetServerSidePropsResult<{ quest: QuestInd & { user: { name: string | null } | null } | null }>> => {
@@ -37,7 +33,7 @@ const getServerSideProps: GetServerSideProps = async (
     }
 
     // Create a new object with the post data and update the 'createdAt' and 'updatedAt' fields to a JSON serializable format
-    const serializablePost = {
+    const serializableQuest = {
         ...quest,
         createdAt: quest.createdAt ? quest.createdAt.toISOString() : null,
         updatedAt: quest.updatedAt ? quest.updatedAt.toISOString() : null,
@@ -45,13 +41,12 @@ const getServerSideProps: GetServerSideProps = async (
 
     return {
         props: {
-            quest: serializablePost,
+            quest: serializableQuest,
         },
     };
 };
 
-const PostPage = ({ quest }: { quest: QuestInd & { user: { name: string | null } | null } | null }) => {
-        console.log(quest)
+const QuestPage = ({ quest }: { quest: QuestInd & { user: { name: string | null } | null } | null }) => {
 
         return (
             <div>
@@ -63,6 +58,6 @@ const PostPage = ({ quest }: { quest: QuestInd & { user: { name: string | null }
         );
     };
 
-    export default PostPage;
+export default QuestPage;
     export { getServerSideProps };
 

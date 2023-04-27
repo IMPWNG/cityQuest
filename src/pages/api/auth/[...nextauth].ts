@@ -17,5 +17,6 @@ const options = {
     }),
   ],
   adapter: PrismaAdapter(prisma),
+  strategy : 'jwt',
 };
 

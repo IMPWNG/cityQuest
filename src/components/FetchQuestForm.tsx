@@ -7,20 +7,23 @@ type CardProps = {
 };
 
 const Card = ({ children }: CardProps) => {
+
   return (
-    <div className="bg-gray-100 p-6 w-full md:w-1/2 lg:w-1/3 mx-auto mt-10 rounded-md shadow-lg border-4 border-yellow-400">
+    <div className="bg-gray-100 p-6 w-full  mt-10 rounded-md shadow-lg border-4 border-yellow-400">
       {children}
     </div>
   );
 };
 
-export default function Form() {
+export default function FetchQuestForm() {
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [type, setType] = useState<string>("");
   const [reward, setReward] = useState<boolean>(false);
   const [amoutReward, setAmoutReward] = useState<number>(0);
   const [published, setPublished] = useState<boolean>(false);
+
+
 
   const router = useRouter();
 
@@ -56,7 +59,7 @@ export default function Form() {
   return (
     <Card>
       <h2 className="text-2xl font-bold mb-4 text-center text-yellow-700">
-        Quest Request
+        Create a Fetch Quest
       </h2>
       <form
         onSubmit={handleSubmitPost}
