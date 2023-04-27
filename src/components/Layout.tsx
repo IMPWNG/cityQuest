@@ -60,13 +60,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
       <div className="flex flex-col items-center justify-center">
         {children}
       </div>
-      <footer className="flex items-center justify-center w-full h-24 border-t bg-red-400">
-        <p className="text-white">
-            City Quest
-        </p>
-        
-    </footer>
-
+     
     </>
   );
 };

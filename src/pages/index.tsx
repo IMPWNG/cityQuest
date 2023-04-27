@@ -10,7 +10,6 @@ export default function Home() {
   const [formType, setFormType] = useState<string | null>(null);
 
 
-
   const { data: session, status } = useSession();
 
 
@@ -38,13 +37,13 @@ export default function Home() {
                 What kind of quest do you want to create?
             </h2>
             <div className="flex flex-row items-center justify-center space-x-4">
-            <button className="bg-green-600 text-white p-2 rounded-md mt-2 transition duration-200 ease-in-out hover:bg-green-700" onClick={() => setFormType("fetch")}>
+            <button className="bg-blue-400 text-white p-2 rounded-md mt-2 transition duration-200 ease-in-out hover:bg-blue-700" onClick={() => setFormType("fetch")}>
               Fetch Quests
             </button>
-            <button className="bg-green-600 text-white p-2 rounded-md mt-2 transition duration-200 ease-in-out hover:bg-green-700" onClick={() => setFormType("skill")}>
+            <button className="bg-red-400 text-white p-2 rounded-md mt-2 transition duration-200 ease-in-out hover:bg-red-700" onClick={() => setFormType("skill")}>
              Skill Quests
             </button>
-            <button className="bg-green-600 text-white p-2 rounded-md mt-2 transition duration-200 ease-in-out hover:bg-green-700" onClick={() => setFormType("help")}>
+            <button className="bg-green-400 text-white p-2 rounded-md mt-2 transition duration-200 ease-in-out hover:bg-green-700" onClick={() => setFormType("help")}>
               Help Quests
             </button>
             </div>

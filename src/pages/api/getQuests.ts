@@ -10,7 +10,7 @@ export default async function handler(
       where: { published: true },
       include: {
         user: {
-          select: { name: true },
+          select: { id: true },
         },
       },
     });

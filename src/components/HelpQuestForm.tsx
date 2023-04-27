@@ -27,7 +27,7 @@ export default function HelpQuestForm() {
     async function handleSubmitPost(e: React.SyntheticEvent) {
         e.preventDefault();
         const data = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_URL}/api/createQuest`,
+            `${process.env.BASE_URL}/api/createQuest`,
             {
                 method: "POST",
                 body: JSON.stringify({

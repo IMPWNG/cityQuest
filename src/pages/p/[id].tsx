@@ -14,14 +14,14 @@ interface QuestInd {
 
 const getServerSideProps: GetServerSideProps = async (
     context: GetServerSidePropsContext<ParsedUrlQuery>
-): Promise<GetServerSidePropsResult<{ quest: QuestInd & { user: { name: string | null } | null } | null }>> => {
+): Promise<GetServerSidePropsResult<{ quest: QuestInd & { user: { id: string | null } | null } | null }>> => {
     const quest = await prisma.quest.findUnique({
         where: {
             id: context.params?.id as string,
         },
         include: {
             user: {
-                select: { name: true },
+                select: { id: true },
             },
         },
     });
@@ -46,7 +46,7 @@ const getServerSideProps: GetServerSideProps = async (
     };
 };
 
-const QuestPage = ({ quest }: { quest: QuestInd & { user: { name: string | null } | null } | null }) => {
+const QuestPage = ({ quest }: { quest: QuestInd & { user: { id: string | null } | null } | null }) => {
 
         return (
             <div>

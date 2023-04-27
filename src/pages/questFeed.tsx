@@ -1,12 +1,10 @@
-import Link from "next/link";
-import FetchQuestForm from "@/components/FetchQuestForm";
-import HelpQuestForm from "@/components/HelpQuestForm";
-import SkillQuestForm from "@/components/SkillQuestForm";
+import { QuestTypeChip } from "@/components/QuestTypeChip";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { GetServerSideProps } from 'next';
 import clsx from "clsx";
+import { Console } from "console";
 
 interface Quest {
     id: string;
@@ -23,7 +21,7 @@ interface QuestFeedProps {
 }
 
 async function getQuests() {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getQuests/`);
+    const res = await fetch(`${process.env.BASE_URL}/api/getQuests/`);
     if (!res.ok) {
         console.log("error1", res);
     }
@@ -32,7 +30,7 @@ async function getQuests() {
 
 async function handleDeletePost(id: number) {
     const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/deletePost/${id}`,
+        `${process.env.BASE_URL}/api/deletePost/${id}`,
         {
             method: "DELETE",
         }
@@ -61,26 +59,41 @@ export default function QuestFeed({ data: initialData }: QuestFeedProps) {
 
         setData(updatedData);
     };
+
+    const cardBorderColor: { [key: string]: string } = {
+        fetch: "border-blue-400 border-4",
+        help: "border-green-400 border-4",
+        skill: "border-red-400 border-4",
+    };
+
     return (
+        console.log(data),
         <main className='flex min-h-screen flex-col items-center justify-between p-24'>
             <div className="flex flex-col items-center justify-center">
                 {Array.isArray(data) &&
                     data.map((quest: any) => (
                         <div
                             key={quest.id}
-                            className="bg-gray-100 border-4 border-green-600 shadow-lg rounded-lg mx-auto max-w-md my-4 p-6 overflow-hidden"
+                            className={clsx(
+                                "shadow-lg rounded-lg mx-auto max-w-md my-4 p-6 overflow-hidden bg-slate-200    ",
+                                cardBorderColor[quest.type]
+                            )}
                         >
-                            <div className="flex items-center mb-4">
-                                <img
-                                    src="/path/to/your/rpg-icon.svg"
-                                    alt="RPG Icon"
-                                    className="w-10 h-10 mr-4" />
+                     
+                            <div className="flex items-center mb-4 justify-center">
+                               
                                 <h2 className="text-2xl font-semibold text-gray-800">
                                     {quest.title}
                                 </h2>
                             </div>
+                            <div key={quest.id} className="flex flex-col my-4">
+                                <QuestTypeChip selected={true} type={quest.type}>
+                                    {quest.type.charAt(0).toUpperCase() + quest.type.slice(1)}
+                                </QuestTypeChip>
+
+                            </div>
                             <p className="text-gray-700 leading-relaxed">{quest.content}</p>
-                            <p className="text-sm text-gray-500">Type: {quest.type}</p>
+                          
                             <p className="text-sm text-gray-500">
                                 Reward: {quest.reward ? quest.amoutReward : 1}
                             </p>

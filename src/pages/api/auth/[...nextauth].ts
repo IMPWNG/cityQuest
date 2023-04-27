@@ -1,22 +1,30 @@
-// pages/api/auth/[...nextauth].ts
-
 import { NextApiHandler } from "next";
 import NextAuth from "next-auth";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import GoogleProvider from "next-auth/providers/google";
 import prisma from "../../../../prisma/client";
 
-const authHandler: NextApiHandler = (req, res) => NextAuth(req, res, options);
-export default authHandler;
-
-const options = {
+export const authOptions = {
   providers: [
     GoogleProvider({
-      clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "",
-      clientSecret: process.env.NEXT_PUBLIC_GOOGLE_SECRET || "",
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_SECRET || "",
     }),
   ],
   adapter: PrismaAdapter(prisma),
-  strategy : 'jwt',
+  session: {
+    jwt: true,
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+    updateAge: 24 * 60 * 60, // 24 hours
+    async callbacks(session: { user: { id: string } }, user: { id: string }) {
+      session.user.id = user.id;
+      return session;
+    },
+  },
+  secret: process.env.SECRET,
+  debug: true,
 };
+
+export default NextAuth(authOptions)
+
 
